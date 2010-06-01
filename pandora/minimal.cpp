@@ -467,7 +467,11 @@ void gp2x_init(int ticks_per_second, int bpp, int rate, int bits, int stereo, in
 #endif
 
 #if defined(WITH_SDL_VIDEO)
+#ifdef MAEMO_CHANGES
+  sdl_hw_screen = SDL_SetVideoMode(X_RES, Y_RES, BITS_PER_PIXEL, SDL_HWSURFACE | SDL_FULLSCREEN);
+#else
   sdl_hw_screen = SDL_SetVideoMode(X_RES, Y_RES, BITS_PER_PIXEL, SDL_SWSURFACE);
+#endif
   if(sdl_hw_screen == NULL)
   {
     gp2x_deinit();  
@@ -520,7 +524,11 @@ void gp2x_change_res(int w, int h)
     return;
   }
 
+#ifdef MAEMO_CHANGES
+  sdl_hw_screen = SDL_SetVideoMode(w, h, BITS_PER_PIXEL, SDL_HWSURFACE | SDL_FULLSCREEN);
+#else
   sdl_hw_screen = SDL_SetVideoMode(w, h, BITS_PER_PIXEL, SDL_SWSURFACE);
+#endif
   if(sdl_hw_screen == NULL)
   {
     gp2x_deinit();  

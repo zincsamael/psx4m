@@ -13,6 +13,9 @@
 #include "../PsxCommon.h"
 #include "usbjoy_wrapper.h"
 #include "usbjoy.h"
+#if defined(WITH_SDL_VIDEO) || defined(WITH_SDL_INPUT)
+#include <SDL.h>
+#endif
 
 #define AUDIO_BUFFER_SIZE (1024*2)
 
