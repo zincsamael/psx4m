@@ -1,0 +1,35 @@
+#include "../../PsxCommon.h"
+
+u32 psxBranchTest_rec(u32 cycles, u32 pc)
+{
+	/* Misc helper */
+	psxRegs->pc = pc;
+	psxRegs->cycle += cycles;
+
+	/* Make sure interrupts  always when mcd is active */
+	//if( mcdst != 0 || (psxRegs->cycle - psxRegs->psx_next_io_base)  >= psxRegs->psx_next_io_count )
+	{
+		psxBranchTest();
+	}
+
+	u32 compiledpc = (u32)PC_REC32(psxRegs->pc);
+
+	if( compiledpc != 0 )
+	{
+		return compiledpc;
+	}
+
+	return recRecompile();
+}
+
+#ifdef IPHONE
+extern "C" void sys_icache_invalidate(const void* Addr, size_t len);
+extern "C" void __clear_cache (char *beg, char *end);
+
+void clear_insn_cache(u32 start, u32 end, int type)
+{
+	//__clear_cache((char *)start,(char *)end);
+
+	sys_icache_invalidate((void*)start, end - start);
+}
+#endif
