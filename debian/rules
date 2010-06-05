@@ -9,8 +9,6 @@ DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 
 CFLAGS = -Wall -g
 
-MAKE +=  -f Makefile.maemo
-
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
 else
@@ -21,8 +19,8 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
-	$(MAKE) -f Makefile.maemo
-	$(MAKE) -c maemo/gui
+	#$(MAKE) -f Makefile.maemo
+	$(MAKE) -C maemo/gui
 	touch build-stamp
 
 clean:
@@ -30,7 +28,8 @@ clean:
 	dh_testroot
 	rm -f build-stamp
 	dh_clean
-	$(MAKE) clean
+	$(MAKE) -f Makefile.maemo clean
+	$(MAKE) -C maemo/gui clean
 
 install: build
 	dh_testdir
