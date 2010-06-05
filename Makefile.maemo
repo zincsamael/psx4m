@@ -7,11 +7,11 @@ CC     	= ${PREFIX}gcc
 CXX    	= ${PREFIX}g++
 AS     	= ${PREFIX}g++
 STRIP  	= ${PREFIX}strip
-INC    	= /usr/include/SDL
+INC    	= 
 INCS   	= ${INC}
 LD     	= ${PREFIX}g++
 M4      = ${PREFIX}m4
-LDFLAGS	= -lpthread -lm -ldl -lz -lSDL
+LDFLAGS	= -lpthread -lm -ldl -lz
 
 #STD_INTERP=1
 #NAME  = psx4all_std_int
@@ -42,8 +42,6 @@ DEFS = -DPSXDUMMYDEFINE
 #DEFS += -DNOTHREADLIB 
 #DEFS += -DGP2X_SDLWRAPPER_NODOUBLEBUFFER
 
-DEFS += -DWITH_SDL_INPUT
-DEFS += -DWITH_SDL_VIDEO
 DEFS += -DMAEMO_CHANGES
 
 ifdef STD_INTERP
