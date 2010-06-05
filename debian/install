@@ -1,0 +1,5 @@
+psx4all usr/games/
+src/maemo/psx4all.desktop usr/share/applications/hildon/
+src/maemo/psx4all.png usr/share/pixmaps/
+src/maemo/psx4all_banner.jpg usr/share/psx4all/
+src/maemo/psx4all.schemas usr/share/gconf/schemas/
