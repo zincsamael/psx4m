@@ -22,7 +22,7 @@ build: build-stamp
 build-stamp:
 	dh_testdir
 	$(MAKE) -f Makefile.maemo
-	$(MAKE) -c maemo
+	$(MAKE) -c maemo/gui
 	touch build-stamp
 
 clean:
