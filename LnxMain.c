@@ -133,7 +133,6 @@ int main(int argc, char *argv[])
 							"\toptions:\n"
 							"\t-runcd\t\tRuns CdRom\n"
 							"\t-runcdbios\tRuns CdRom Through Bios\n"
-							"\t-nogui\t\tDon't open GtkGui\n"
 							"\t-cfg FILE\tLoads desired configuration file (def:Pcsx.cfg)\n"
 							"\t-psxout\t\tEnable psx output\n"
 							"\t-load STATENUM\tLoads savestate STATENUM (1-5)\n"
