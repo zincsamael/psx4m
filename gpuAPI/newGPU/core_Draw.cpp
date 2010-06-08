@@ -182,8 +182,12 @@ void gpuVideoOutput(void)
 #if defined(PANDORA)
 if(!isRGB24)
 {
+#ifdef MAEMO_CHANGES
+  u8* dest_screen8 = (u8*)gp2x_screen16;
+#else
   u32* dest_screen32 = (u32*)gp2x_screen16;
-	u32* src_screen32  = (u32*)(&((u16*)GPU_FrameBuffer)[FRAME_OFFSET(x0,y0)]);
+#endif
+  u32* src_screen32  = (u32*)(&((u16*)GPU_FrameBuffer)[FRAME_OFFSET(x0,y0)]);
 	
   int x, y;
   for(y = 0; y < h1; y++)
@@ -191,7 +195,16 @@ if(!isRGB24)
     for(x = 0; x < w0>>1; x++)
     {
       const u32 pixbgr = src_screen32[x];
+#ifdef MAEMO_CHANGES
+      *dest_screen8++ = (pixbgr&0x1f)<<3;		// R
+      *dest_screen8++ = (pixbgr&(0x1f<<5))>>2;	// G
+      *dest_screen8++ = (pixbgr&(0x1f<<10))>>7;	// B
+      *dest_screen8++ = (pixbgr&0x1f0000)>>13;			// R
+      *dest_screen8++ = (pixbgr&(0x1f0000<<5))>>18;		// G
+      *dest_screen8++ = (pixbgr&(0x1f0000<<10))>>23;	// B
+#else
       *dest_screen32++ = ((pixbgr&(0x1f001f<<10))>>10) | ((pixbgr&(0x1f001f<<5))<<1) | ((pixbgr&(0x1f001f<<0))<<11);
+#endif
     }
     src_screen32 += 512;
   }
