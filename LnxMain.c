@@ -38,7 +38,6 @@ extern const char* get_documents_path(char* file);
 int __saved = 0;
 
 PcsxConfig Config;
-char cfgfile[256];
 R3000Acpu *psxCpu;
 psxRegisters* psxRegs;
 u32 *psxMemWLUT;
@@ -90,37 +89,6 @@ int main(int argc, char *argv[])
 	Config.HLE = 0;
 	sprintf(Config.Bios, "/scph1001.bin");
 	
-	strcpy(cfgfile, "Pcsx.cfg");
-
-	for (i=1; i<argc; i++) {
-		if (!strcmp(argv[i], "-runcd")) runcd = 1;
-		else if (!strcmp(argv[i], "-runcdbios")) runcd = 2;
-		else if (!strcmp(argv[i], "-psxout")) Config.PsxOut = 1;
-		else if (!strcmp(argv[i], "-load")) loadst = argv[++i];
-		else if (!strcmp(argv[i], "-cfg")) strcpy(cfgfile, argv[++i]);
-		else if (!strcmp(argv[i], "-hle")) 
-		{
-		  Config.HLE = 1;
-    	sprintf(Config.Bios, "HLE");
-		}
-		else if (!strcmp(argv[i], "-h") ||
-			 !strcmp(argv[i], "-help")) {
-			 printf("%s\n", _(
-			 				" pcsx [options] [file]\n"
-							"\toptions:\n"
-							"\t-runcd\t\tRuns CdRom\n"
-							"\t-runcdbios\tRuns CdRom Through Bios\n"
-							"\t-nogui\t\tDon't open GtkGui\n"
-							"\t-cfg FILE\tLoads desired configuration file (def:Pcsx.cfg)\n"
-							"\t-psxout\t\tEnable psx output\n"
-							"\t-load STATENUM\tLoads savestate STATENUM (1-5)\n"
-							"\t-h -help\tThis help\n"
-							"\tfile\t\tLoads file\n"));
-			 return 0;
-		} else file = argv[i];
-	}
-	packfile = file;
-
 	strcpy(Config.Net, _("Disabled"));
 #ifdef IPHONE
   ChangeWorkingDirectory(get_documents_path("psx4iphone"));
@@ -147,6 +115,34 @@ int main(int argc, char *argv[])
 	Config.Sio = 0;
 	Config.SpuIrq = 0;
 	Config.VSyncWA = 0;
+
+	for (i=1; i<argc; i++) {
+		if (!strcmp(argv[i], "-runcd")) runcd = 1;
+		else if (!strcmp(argv[i], "-runcdbios")) runcd = 2;
+		else if (!strcmp(argv[i], "-psxout")) Config.PsxOut = 1;
+		else if (!strcmp(argv[i], "-load")) loadst = argv[++i];
+		else if (!strcmp(argv[i], "-hle")) 
+		{
+		  Config.HLE = 1;
+    	sprintf(Config.Bios, "HLE");
+		}
+		else if (!strcmp(argv[i], "-h") ||
+			 !strcmp(argv[i], "-help")) {
+			 printf("%s\n", _(
+			 				" pcsx [options] [file]\n"
+							"\toptions:\n"
+							"\t-runcd\t\tRuns CdRom\n"
+							"\t-runcdbios\tRuns CdRom Through Bios\n"
+							"\t-nogui\t\tDon't open GtkGui\n"
+							"\t-cfg FILE\tLoads desired configuration file (def:Pcsx.cfg)\n"
+							"\t-psxout\t\tEnable psx output\n"
+							"\t-load STATENUM\tLoads savestate STATENUM (1-5)\n"
+							"\t-h -help\tThis help\n"
+							"\tfile\t\tLoads file\n"));
+			 return 0;
+		} else file = argv[i];
+	}
+	packfile = file;
 
 	gp2x_init(1000, 16, 11025, 16, 1, 60, 1);
 
@@ -251,10 +247,10 @@ void SysPrintf(char *fmt, ...) {
 	vsprintf(msg, fmt, list);
 	va_end(list);
 
-	if (Config.PsxOut) printf ("%s", msg);
+	if (Config.PsxOut) printf ("%s\n", msg);
 #ifdef EMU_LOG
 #ifndef LOG_STDOUT
-	fprintf(emuLog, "%s", msg);
+	fprintf(emuLog, "%s\n", msg);
 #endif
 #endif
 }
@@ -291,7 +287,7 @@ void SysMessage(char* fmt, ...) {
 
 	__sysmsg[127]=0;
 
-	if (Config.PsxOut) printf ("%s", __sysmsg);
+	if (Config.PsxOut) printf ("%s\n", __sysmsg);
 	//SysPrintf("%s", __sysmsg);
 	fprintf(emuLog, "%s\r\n", __sysmsg);
 	fflush(emuLog);
