@@ -62,6 +62,8 @@ void gp2x_change_res(int w, int h)
 
 	screenbuffer = (unsigned short*) image->mem;
 	screen_size = w * h * image->bpp;
+
+	gtk_image_set_from_image (GTK_IMAGE(drawing), image, NULL);
 }
 
 unsigned long gp2x_joystick_read(void)
@@ -81,8 +83,5 @@ void gp2x_video_RGB_clearscreen16(void)
 
 void updateScreen()
 {
-	//gdk_draw_image(
-	//	drawing->window, gc,
-	//	image, 0, 0, 0, 0, -1, -1);
-	gtk_image_set_from_image (GTK_IMAGE(drawing), image, NULL);
+	gtk_widget_queue_draw (drawing);
 }
