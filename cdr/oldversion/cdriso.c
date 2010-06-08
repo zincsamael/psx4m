@@ -71,6 +71,11 @@ s32 CDR_open() {
 
 	IsoFile = packfile;
 
+	if (IsoFile == NULL) {
+		SysPrintf("No CD image given");
+		return -1;
+	}
+
 	Zmode = UpdateZmode();
 
 	if (Zmode) {
