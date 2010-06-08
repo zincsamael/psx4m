@@ -309,7 +309,7 @@ void gp2x_init(int ticks_per_second, int bpp, int rate, int bits, int stereo, in
 	videobuffer = (u16*)malloc(320*240*2);
 }
 
-#ifndef MAEMO
+#ifndef MAEMO_CHANGES
 void gp2x_video_RGB_clearscreen16(void)
 {
   memset(gp2x_screen16, 0, 320*240*2);

@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 							"\toptions:\n"
 							"\t-runcd\t\tRuns CdRom\n"
 							"\t-runcdbios\tRuns CdRom Through Bios\n"
-							"\t-cfg FILE\tLoads desired configuration file (def:Pcsx.cfg)\n"
+							"\t-hle\t\tUse HLE\n"
 							"\t-psxout\t\tEnable psx output\n"
 							"\t-load STATENUM\tLoads savestate STATENUM (1-5)\n"
 							"\t-h -help\tThis help\n"
@@ -144,6 +144,10 @@ int main(int argc, char *argv[])
 	packfile = file;
 
 	gp2x_init(1000, 16, 11025, 16, 1, 60, 1);
+
+#ifdef MAEMO_CHANGES
+	hildon_init (&argc, &argv);
+#endif
 
 	if (SysInit() == -1) return 1;
 
