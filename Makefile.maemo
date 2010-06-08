@@ -17,7 +17,7 @@ LDFLAGS	= -lpthread -lm -ldl -lz
 #NAME  = psx4all_std_int
 
 STD_DYNAREC=1
-NAME  = psx4all_std_rec
+NAME  = psx4m
 
 PROG   = $(NAME)
 
@@ -56,29 +56,16 @@ ifdef USE_HLE
 DEFS += -DWITH_HLE
 endif
 
-DEFAULT_CFLAGS = -DPANDORA -DGP2X -DARM_ARCH \
+DEFAULT_CFLAGS = -DMAEMO -DPANDORA -DGP2X -DARM_ARCH \
  -DDATA_PREFIX=\"/home/user\" \
  -DROM_PREFIX=\"/home/user/MyDocs\" \
- -Isrc -I./pandora -I$(INCS) $(DEFS) -ggdb
+ -Isrc -I./iphone -I./maemo -I$(INCS) $(DEFS) -ggdb -Wno-write-strings
 
 MORE_CFLAGS = -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 -mfloat-abi=softfp -mfpu=neon \
  -O3 -ffast-math -ftemplate-depth-36 -fstrict-aliasing \
  -mstructure-size-boundary=32 -falign-functions=32 -falign-loops \
  -falign-labels -falign-jumps -finline -finline-functions -fno-builtin -fno-common \
  -funroll-loops -fstrength-reduce -fpeel-loops -fomit-frame-pointer -fsigned-char -DINLINE="inline"
-
-#-ffast-math -ftemplate-depth-36 -fstrict-aliasing -mstructure-size-boundary=32 -falign-functions=32 -falign-loops -falign-labels -falign-jumps -finline -finline-functions -fno-builtin -fno-common -funroll-loops -fstrength-reduce -fpeel-loops -fomit-frame-pointer -fsigned-char -DINLINE="inline"
-
-#MORE_CFLAGS = -ffast-math -mcpu=cortex-a8 -O3
-#MORE_CFLAGS += -ftemplate-depth-36
-#MORE_CFLAGS += -fstrict-aliasing -mstructure-size-boundary=32 -fexpensive-optimizations 
-#MORE_CFLAGS += -fomit-frame-pointer 
-#MORE_CFLAGS += -falign-functions=32 -falign-loops -falign-labels -falign-jumps
-#MORE_CFLAGS += -finline -finline-functions -fno-common
-#MORE_CFLAGS += -funroll-loops -fstrength-reduce 
-#MORE_CFLAGS += -fsigned-char
-#MORE_CFLAGS += -DLSB_FIRST -DSIGNED_SAMPLES -DACORN -DINLINE="inline"
-#MORE_CFLAGS +=	-fpeel-loops 
 
 #MORE_CFLAGS += -DMITSHM $(DEFS) -DUNZIP_SUPPORT -DZLIB -DHAVE_MKSTEMP -DHAVE_STRINGS_H 
 #'-DACCEPT_SIZE_T=int'
@@ -107,10 +94,8 @@ OBJS =	\
 	Sio.o \
 	Spu.o \
 	interpreter/interpreter.o \
-	pandora/usbjoy.o \
-	pandora/usbjoy_wrapper.o \
-	pandora/pnd_event.o \
-	pandora/minimal.o
+	iphone/minimal.o \
+	maemo/gtk.o
 	
 OBJS += 	cdr/oldversion/cdriso.o 
 
@@ -137,7 +122,7 @@ OBJS +=	\
 	franspu/spu_callback.o \
 	franspu/spu_dma.o \
 	franspu/spu_registers.o \
-	franspu/spu_output_sdl.o
+	franspu/spu_output.o
 else
 OBJS +=	\
 	petespu/stdafx.o \
@@ -178,7 +163,7 @@ GPU_OBJS += gpuAPI/newGPU/newGPU.o 	      \
             gpuAPI/newGPU/inner.o
 endif
 
-ASM_OBJS += pandora/video_blit.S gpuAPI/newGPU/ARM_asm.S
+ASM_OBJS += gpuAPI/newGPU/ARM_asm.S
 
 
 %.o: %.cpp
