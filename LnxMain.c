@@ -128,8 +128,8 @@ int main(int argc, char *argv[])
 		}
 		else if (!strcmp(argv[i], "-h") ||
 			 !strcmp(argv[i], "-help")) {
-			 printf("%s\n", _(
-			 				" pcsx [options] [file]\n"
+			 printf("%s %s\n", argv[0], _(
+			 				"[options] [file]\n"
 							"\toptions:\n"
 							"\t-runcd\t\tRuns CdRom\n"
 							"\t-runcdbios\tRuns CdRom Through Bios\n"
