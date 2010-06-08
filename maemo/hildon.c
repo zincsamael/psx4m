@@ -76,3 +76,39 @@ void updateScreen()
 {
 	gtk_widget_queue_draw (drawing);
 }
+
+void gp2x_printfchar15(gp2x_font *f, unsigned char c)
+{
+  unsigned short *dst=&((unsigned short*)gp2x_screen16)[f->x+f->y*(image->bpl>>1)],w,h=f->h;
+//unsigned char  *src=f->data[ (c%16)*f->w + (c/16)*f->h ];
+  unsigned char  *src=&f->data[c*10];
+
+ if(f->solid)
+         while(h--)
+         {
+          w=f->wmask;
+          while(w)
+          {
+           if( *src & w ) *dst++=f->fg; else *dst++=f->bg;
+           w>>=1;
+          }
+          src++;    
+
+          dst+=(image->bpl>>1)-(f->w);
+         }
+ else
+         while(h--)
+         {
+          w=f->wmask;
+          while(w)
+          {
+           if( *src & w ) *dst=f->fg;
+           dst++;
+           w>>=1;
+          }
+          src++;
+
+          dst+=(image->bpl>>1)-(f->w);
+         }
+}
+

@@ -51,6 +51,7 @@ extern void gp2x_sound_play(void *buff, int len);
 extern unsigned long gp2x_joystick_read(void);
 extern void           gp2x_printf(gp2x_font *, int, int, const char *, ...);
 extern void           gp2x_printf_init(gp2x_font *, int, int, void *, int, int, int);
+extern void           gp2x_printfchar15(gp2x_font *, unsigned char);
 
 extern void           gp2x_init(int, int, int, int, int, int, int);
 extern void           gp2x_deinit(void);

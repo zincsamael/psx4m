@@ -324,6 +324,7 @@ u64 gp2x_timer_read(void)
   return (((u64)current_time.tv_sec * 1000000 + current_time.tv_usec) / 1000);
 }
 
+#ifndef MAEMO_CHANGES
 void gp2x_printfchar15(gp2x_font *f, unsigned char c)
 {
   unsigned short *dst=&((unsigned short*)gp2x_screen16)[f->x+f->y*(320)],w,h=f->h;
@@ -358,6 +359,7 @@ void gp2x_printfchar15(gp2x_font *f, unsigned char c)
           dst+=(320)-(f->w);
          }
 }
+#endif
 
 void gp2x_printf(gp2x_font *f, int x, int y, const char *format, ...)
 {
