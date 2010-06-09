@@ -61,8 +61,8 @@ DEFAULT_CFLAGS = -DPANDORA -DGP2X -DARM_ARCH \
  -DROM_PREFIX=\"/home/user/MyDocs\" \
  -Isrc -I./maemo -I./iphone -I$(INCS) $(DEFS) -ggdb -Wno-write-strings
 
-DEFAULT_CFLAGS += $(shell pkg-config --cflags hildon-1 libpulse-simple)
-LDFLAGS += $(shell pkg-config --libs hildon-1 libpulse-simple)
+DEFAULT_CFLAGS += $(shell pkg-config --cflags hildon-1 sdl)
+LDFLAGS += $(shell pkg-config --libs hildon-1 sdl)
 
 MORE_CFLAGS = -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 -mfloat-abi=softfp -mfpu=neon \
  -O3 -ffast-math -ftemplate-depth-36 -fstrict-aliasing \
@@ -122,10 +122,10 @@ OBJS += nullspu/spu_core.o
 else
 ifdef NEWSPU
 OBJS +=	\
-	franspu/spu.o \
+	franspu/spu_callback.o \
 	franspu/spu_dma.o \
 	franspu/spu_registers.o \
-	franspu/spu_output_pulseaudio.o
+	franspu/spu_output_sdl.o
 else
 OBJS +=	\
 	petespu/stdafx.o \
