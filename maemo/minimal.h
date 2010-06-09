@@ -1,5 +1,4 @@
 #include "../iphone/minimal.h"
-#include <SDL.h>
 
 extern int iSoundMuted;
 
