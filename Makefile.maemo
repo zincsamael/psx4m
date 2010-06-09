@@ -133,7 +133,7 @@ OBJS +=	\
 	petespu/adsr.o \
 	petespu/spu_dma.o \
 	petespu/freeze.o \
-	petespu/oss.o \
+	petespu/alsa.o \
 	petespu/registers.o \
 	petespu/reverb.o \
 	petespu/spu.o \
