@@ -31,7 +31,6 @@ NEWSPU=1
 DEFS = -DPSXDUMMYDEFINE
 #DEFS  += -DUSE_OLD_COUNTERS
 #DEFS  += -DNOSOUND
-DEFS += -DUSEPULSEAUDIO
 
 #DEFS += -DNO_RENDER
 
@@ -62,8 +61,8 @@ DEFAULT_CFLAGS = -DPANDORA -DGP2X -DARM_ARCH \
  -DROM_PREFIX=\"/home/user/MyDocs\" \
  -Isrc -I./maemo -I./iphone -I$(INCS) $(DEFS) -ggdb -Wno-write-strings
 
-DEFAULT_CFLAGS += $(shell pkg-config --cflags hildon-1 pulsecore)
-LDFLAGS += $(shell pkg-config --libs hildon-1 pulsecore)
+DEFAULT_CFLAGS += $(shell pkg-config --cflags hildon-1 libpulse-simple)
+LDFLAGS += $(shell pkg-config --libs hildon-1 libpulse-simple)
 
 MORE_CFLAGS = -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 -mfloat-abi=softfp -mfpu=neon \
  -O3 -ffast-math -ftemplate-depth-36 -fstrict-aliasing \
