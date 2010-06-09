@@ -17,6 +17,84 @@ GtkWidget *window, *drawing;
 int screen_size;
 unsigned short* screenbuffer = NULL;
 
+unsigned long keys = 0;
+
+static void
+window_key_proxy (GtkWidget *widget,
+		     GdkEventKey *event,
+		     gpointer user_data)
+{
+	unsigned long key = 0;
+	
+	switch (event->keyval) {
+		case GDK_Left:
+			key = GP2X_LEFT;
+			break;
+		case GDK_Right:
+			key = GP2X_RIGHT;
+			break;
+		case GDK_Up:
+			key = GP2X_UP;
+			break;
+		case GDK_Down:
+			key = GP2X_DOWN;
+			break;
+
+		case GDK_x:
+			key = GP2X_B;
+			break;
+		case GDK_z:
+			key = GP2X_X;
+			break;
+		case GDK_s:
+			key = GP2X_Y;
+			break;
+		case GDK_a:
+			key = GP2X_A;
+			break;
+			
+		case GDK_space:
+			key = GP2X_SELECT;
+			break;
+		case GDK_KP_Enter:
+		case GDK_Return:
+			key = GP2X_START;
+			break;
+
+		case GDK_q:
+			key = GP2X_VOL_DOWN;
+			break;
+		case GDK_r:
+			key = GP2X_VOL_UP;
+			break;
+		case GDK_w:
+			key = GP2X_L;
+			break;
+		case GDK_e:
+			key = GP2X_R;
+			break;
+
+		default:
+			key = 0;
+	}
+	
+	if (event->type == GDK_KEY_PRESS) {
+		keys |= key;
+	}
+	else if (event->type == GDK_KEY_RELEASE) {
+		keys &= ~key;
+	}
+
+	//printf("Key 0x%x %s (0x%x)\n", key, event->type == GDK_KEY_PRESS ? "pressed" : "released", keys);
+}
+
+void hildon_quit()
+{
+	gp2x_deinit();
+	gtk_main_quit();
+	exit(0);
+}
+
 void hildon_init(int *argc, char ***argv)
 {
 	gtk_init (argc, argv);
@@ -24,6 +102,14 @@ void hildon_init(int *argc, char ***argv)
 	window = hildon_stackable_window_new ();
 	gtk_widget_realize (window);
 	gtk_window_fullscreen (GTK_WINDOW(window));
+	g_signal_connect (G_OBJECT (window), "key-press-event",
+				G_CALLBACK (window_key_proxy), NULL);
+	g_signal_connect (G_OBJECT (window), "key-release-event",
+				G_CALLBACK (window_key_proxy), NULL);
+	g_signal_connect (G_OBJECT (window), "delete_event",
+				G_CALLBACK (hildon_quit), NULL);
+	gtk_widget_add_events (window,
+				GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 
 	actor = HILDON_ANIMATION_ACTOR (hildon_animation_actor_new());
 	hildon_animation_actor_set_position (actor, (X_RES - D_WIDTH)/2, (Y_RES - D_HEIGHT)/2 );
@@ -61,11 +147,12 @@ void gp2x_change_res(int w, int h)
 
 unsigned long gp2x_joystick_read(void)
 {
+	//printf("gp2x_joystick_read\n");
 	/* process GTK+ events */
 	while (gtk_events_pending())
 		gtk_main_iteration();
 
-	return 0;
+	return keys;
 }
 
 void gp2x_video_RGB_clearscreen16(void)
