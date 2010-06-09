@@ -39,6 +39,8 @@ void hildon_init(int *argc, char ***argv)
 
 void gp2x_change_res(int w, int h)
 {
+	SysPrintf ("PSX resolution change: %dx%d", w, h);
+	
 	if (w <= 0 || h <= 0)
 		return;
 
@@ -46,7 +48,7 @@ void gp2x_change_res(int w, int h)
 	image = gdk_image_new( GDK_IMAGE_FASTEST, gdk_visual_get_system(), w, h );
 
 	screenbuffer = (unsigned short*) image->mem;
-	screen_size = w * h * image->bpp;
+	screen_size = image->bpl * h * image->bpp;
 
 	gtk_image_set_from_image (GTK_IMAGE(drawing), image, NULL);
 
