@@ -60,12 +60,6 @@ static Settings settings = {
      20,
 };
 
-// the number of bytes written in SoundFeedStreamData
-const int mixlen = 3240;
-
-// used to calculate how much space is used in the buffer, for debugging purposes
-//int maxlength = 0;
-
 ////////////////////////////////////////////////////////////////////////
 // CALLBACKS FOR THREADED MAINLOOP
 ////////////////////////////////////////////////////////////////////////
@@ -150,7 +144,7 @@ void SetupSound (void)
 
      // Acquire context ////////////////////////////////////////////////////////
      device.api = pa_threaded_mainloop_get_api (device.mainloop);
-     device.context = pa_context_new (device.api, "PCSX");
+     device.context = pa_context_new (device.api, "PSX4ALL");
      pa_context_set_state_callback (device.context, context_state_cb, &device);
 
      if (device.context == NULL)
@@ -195,7 +189,7 @@ void SetupSound (void)
 
      // Set sample spec ////////////////////////////////////////////////////////
      device.spec.format = PA_SAMPLE_S16LE;
-     device.spec.channels = 2;
+     device.spec.channels = 1;
      device.spec.rate = settings.frequency;
 
      pa_buffer_attr buffer_attributes;
@@ -204,11 +198,10 @@ void SetupSound (void)
      buffer_attributes.minreq = buffer_attributes.tlength / 3;
      buffer_attributes.prebuf = buffer_attributes.tlength;
 
-     //maxlength = buffer_attributes.maxlength;
-     //fprintf (stderr, "Total space: %u\n", buffer_attributes.maxlength);
-     //fprintf (stderr, "Minimum request size: %u\n", buffer_attributes.minreq);
-     //fprintf (stderr, "Bytes needed before playback: %u\n", buffer_attributes.prebuf);
-     //fprintf (stderr, "Target buffer size: %lu\n", buffer_attributes.tlength);
+     fprintf (stderr, "Total space: %u\n", buffer_attributes.maxlength);
+     fprintf (stderr, "Minimum request size: %u\n", buffer_attributes.minreq);
+     fprintf (stderr, "Bytes needed before playback: %u\n", buffer_attributes.prebuf);
+     fprintf (stderr, "Target buffer size: %lu\n", buffer_attributes.tlength);
 
      // Acquire new stream using spec //////////////////////////////////////////
      device.stream = pa_stream_new (device.context, "PSX4ALL", &device.spec, NULL);
@@ -292,40 +285,6 @@ void RemoveSound (void)
 }
 
 ////////////////////////////////////////////////////////////////////////
-// GET BYTES BUFFERED
-////////////////////////////////////////////////////////////////////////
-
-unsigned long SoundGetBytesBuffered (void)
-{
-     int free_space;
-     int error_code;
-     long latency;
-     int playing = 0;
-
-     if ((device.mainloop == NULL) || (device.api == NULL) || ( device.context == NULL) || (device.stream == NULL))
-     	  return SOUNDSIZE;
-
-     pa_threaded_mainloop_lock (device.mainloop);
-     free_space = pa_stream_writable_size (device.stream);
-     pa_threaded_mainloop_unlock (device.mainloop);
-
-     //fprintf (stderr, "Free space: %d\n", free_space);
-     //fprintf (stderr, "Used space: %d\n", maxlength - free_space);
-     if  (free_space < mixlen * 3)
-     {
-	  // Don't buffer anymore, just play
-	  //fprintf (stderr, "Not buffering.\n");
-     	  return SOUNDSIZE;
-     }
-     else 
-     {
-	  // Buffer some sound
-	  //fprintf (stderr, "Buffering.\n");
-     	  return 0;
-     }
-}
-
-////////////////////////////////////////////////////////////////////////
 // FEED SOUND DATA
 ////////////////////////////////////////////////////////////////////////
 
@@ -343,7 +302,7 @@ void SoundFeedStreamData (unsigned char *pSound, long lBytes)
 	  }
 	  else
 	  {
-	       //SysPrintf ("Wrote %d bytes\n", lBytes);
+	       //fprintf (stderr, "Wrote %d bytes\n", lBytes);
 	       pa_threaded_mainloop_unlock (device.mainloop);
 	  }
      }
