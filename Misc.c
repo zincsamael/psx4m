@@ -356,8 +356,8 @@ int CheckCdrom() {
 		strcpy(CdromLabel, CdromId);
 	}
 */
-	fprintf(stderr, "CdromLabel: %s\n", CdromLabel);
-	fprintf(stderr, "CdromId: %s\n", CdromId);
+	SysPrintf("CdromLabel: %s", CdromLabel);
+	SysPrintf("CdromId: %s", CdromId);
 
 	return 0;
 }
