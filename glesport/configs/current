@@ -1,0 +1,11 @@
+# Configuration defaults for building Mesa (swx11 and GLU).
+
+include $(TOP)/configs/debian-default
+
+CONFIG_NAME = debian-swx11-gles+glu-default
+
+SRC_DIRS = mesa glu
+DRIVER_DIRS = gles
+
+# vim: ft=make
+
