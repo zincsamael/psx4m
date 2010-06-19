@@ -24,6 +24,7 @@ PROG   = $(NAME)
 USE_HLE=1
 NEWSPU=1
 #DRHELLGPU=1
+PEOPSGPU=1
 #DUMMYGPU=1
 
 #NULLSPU=1
@@ -150,6 +151,18 @@ endif
 GPU_OBJS =  gpuAPI/gpuAPI.o
 
 
+ifdef PEOPSGPU
+GPU_OBJS += gpuAPI/peopsGPU/cfg.c  \
+            gpuAPI/peopsGPU/draw.o \
+            gpuAPI/peopsGPU/fps.c  \
+            gpuAPI/peopsGPU/gpu.o  \
+            gpuAPI/peopsGPU/key.c  \
+            gpuAPI/peopsGPU/menu.c \
+            gpuAPI/peopsGPU/prim.c \
+            gpuAPI/peopsGPU/soft.c \
+            gpuAPI/peopsGPU/texture.c
+DEFAULT_CFLAGS += -I ./glesport
+else
 ifdef DRHELLGPU
 GPU_OBJS += gpuAPI/drhellGPU/GPU.o 
 else
@@ -164,6 +177,7 @@ GPU_OBJS += gpuAPI/newGPU/newGPU.o 	      \
             gpuAPI/newGPU/raster_Line.o   \
             gpuAPI/newGPU/raster_Image.o  \
             gpuAPI/newGPU/inner.o
+endif
 endif
 
 ASM_OBJS += gpuAPI/newGPU/ARM_asm.S
