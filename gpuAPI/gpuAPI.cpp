@@ -46,6 +46,7 @@ enum
   E_GPU_GL,
   E_GPU_PSP,
   E_GPU_DRHELL,
+  E_GPU_PEOPS,
   E_GPU_DUMMY,
   E_GPU_COUNT
 };
@@ -56,11 +57,12 @@ static  char  s_gpuNames[E_GPU_COUNT][256] =
   "glGpu",
   "pspGpu",
   "drhellGpu",
+  "peopsGpu",
   "dummyGpu",
 };
 
 BOOL  register_NEWGPU   ()
-#if (defined(PSP) && defined(PSP_GPU))
+#if (defined(PSP) && defined(PSP_GPU)) || defined(PEOPS_GPU)
 { return true;  }
 #else
 ;
@@ -75,6 +77,12 @@ BOOL  register_PSPGPU   ()
 #endif
 BOOL  register_DRHELLGPU   ()
 { return true;  }
+BOOL  register_PEOPSGPU   ()
+#if ! defined(PEOPS_GPU)
+{ return true;  }
+#else
+;
+#endif
 BOOL  register_NOGPU    ();
 
 typedef BOOL  (*PFI)();
@@ -84,6 +92,7 @@ static  PFI s_gpuRegisters[E_GPU_COUNT] =
   register_GLGPU,
   register_PSPGPU,
   register_DRHELLGPU,
+  register_PEOPSGPU,
   register_DUMMYGPU
 };
 

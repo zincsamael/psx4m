@@ -39,16 +39,9 @@ static int iOldMode=0;
 #include "menu.h"
 #include "fps.h"
 #include "key.h"
-#ifdef ENABLE_NLS
-#include <libintl.h>
-#include <locale.h>
-#define _(x)  gettext(x)
-#define N_(x) (x)
-#else
-#define _(x)  (x)
-#define N_(x) (x)
-#endif
                                
+#include "../gpuAPI.h"
+
 ////////////////////////////////////////////////////////////////////////
 // PPDK developer must change libraryName field and can change revision and build
 ////////////////////////////////////////////////////////////////////////
@@ -61,6 +54,13 @@ static char *libraryName     = N_("OpenGL Driver");
 
 static char *PluginAuthor    = N_("Pete Bernert");
 static char *libraryInfo     = N_("Based on P.E.Op.S. MesaGL Driver V1.78\nCoded by Pete Bernert\n");
+
+///////////////////////////////////////////////////////////////////////////////
+//  Tweaks and Hacks
+int  skipCount          = 0; // Def: 0
+int  skipRate           = 1; // Def: 1
+
+long GPUopen(unsigned long * disp,char * CapText,char * CfgFile);
 
 ////////////////////////////////////////////////////////////////////////
 // memory image of the PSX vram
@@ -407,7 +407,7 @@ void CALLBACK GPUmakeSnapshot(void)
 // GPU INIT... here starts it all (first func called by emu)
 ////////////////////////////////////////////////////////////////////////
 
-long CALLBACK GPUinit()
+BOOL CALLBACK GPUinit()
 {
  memset(ulStatusControl,0,256*sizeof(uint32_t));
 
@@ -477,7 +477,7 @@ long CALLBACK GPUinit()
  GPUIsIdle;
  GPUIsReadyForCommands;
 
- return 0;
+ return GPUopen(NULL, "PSX4M", "");
 }                             
 
 ////////////////////////////////////////////////////////////////////////
@@ -750,12 +750,10 @@ void sysdep_create_display(void)                       // create display
  XWindowEvent(display,window,ExposureMask,&event);
  glXMakeCurrent(display,window,cx);
 
-/* 
- printf(glGetString(GL_VENDOR));
+ printf((const char *)glGetString(GL_VENDOR));
  printf("\n");
- printf(glGetString(GL_RENDERER));
+ printf((const char *)glGetString(GL_RENDERER));
  printf("\n");
-*/
 
  if (fx)                                               // after make current: fullscreen resize
   {
@@ -845,6 +843,13 @@ long CALLBACK GPUshutdown()
  psxVSecure=0;
 
  return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void  GPUdone(void)
+{
+ GPUclose();
+ GPUshutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1723,7 +1728,7 @@ uint32_t CALLBACK GPUreadStatus(void)
 // these are always single packet commands.
 ////////////////////////////////////////////////////////////////////////
 
-void CALLBACK GPUwriteStatus(uint32_t gdata)
+void CALLBACK GPUwriteStatus(u32 gdata)
 {
  uint32_t lCommand=(gdata>>24)&0xff;
  
@@ -2331,7 +2336,7 @@ void CheckVRamRead(int x, int y, int dx, int dy,BOOL bFront)
 // core read from vram
 ////////////////////////////////////////////////////////////////////////
 
-void CALLBACK GPUreadDataMem(uint32_t *pMem, int iSize)
+void CALLBACK GPUreadDataMem(u32 *pMem, s32 iSize)
 {
  int i;
 
@@ -2403,9 +2408,9 @@ ENDREAD:
  GPUIsIdle;
 }
 
-uint32_t CALLBACK GPUreadData(void)
+u32 CALLBACK GPUreadData(void)
 {
- uint32_t l;
+ u32 l;
  GPUreadDataMem(&l,1);
  return GPUdataRet;
 }
@@ -2488,7 +2493,7 @@ const unsigned char primTableCX[256] =
 // processes data send to GPU data register
 ////////////////////////////////////////////////////////////////////////
 
-void CALLBACK GPUwriteDataMem(uint32_t *pMem, int iSize)
+void CALLBACK GPUwriteDataMem(u32 *pMem, s32 iSize)
 {
  unsigned char command;
  uint32_t gdata=0;
@@ -2607,7 +2612,7 @@ ENDVRAM:
 
 ////////////////////////////////////////////////////////////////////////
 
-void CALLBACK GPUwriteData(uint32_t gdata)
+void CALLBACK GPUwriteData(u32 gdata)
 {
  GPUwriteDataMem(&gdata,1);
 }
@@ -2691,7 +2696,7 @@ __inline BOOL CheckForEndlessLoop(uint32_t laddr)
 // core gives a dma chain to gpu: same as the gpuwrite interface funcs
 ////////////////////////////////////////////////////////////////////////
 
-long CALLBACK GPUdmaChain(uint32_t *baseAddrL, uint32_t addr)
+void CALLBACK GPUdmaChain(u32 *baseAddrL, u32 addr)
 {
  uint32_t dmaMem;
  unsigned char * baseAddrB;
@@ -2723,8 +2728,6 @@ long CALLBACK GPUdmaChain(uint32_t *baseAddrL, uint32_t addr)
  while (addr != 0xffffff);
 
  GPUIsIdle;
-
- return 0;
 }
            
 ////////////////////////////////////////////////////////////////////////
@@ -2762,7 +2765,7 @@ typedef struct GPUFREEZETAG
 
 ////////////////////////////////////////////////////////////////////////
 
-long CALLBACK GPUfreeze(uint32_t ulGetFreezeData,GPUFreeze_t * pF)
+BOOL CALLBACK GPUfreeze(uint32_t ulGetFreezeData,GPUFreeze_t * pF)
 {
  if(ulGetFreezeData==2) 
   {
@@ -3169,3 +3172,39 @@ void CALLBACK GPUdisplayFlags(uint32_t dwFlags)
 {
  dwCoreFlags=dwFlags;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+BOOL GPUfreeze(BOOL bWrite , GPUFreeze *pFreeze)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void GPUvSinc(void)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  GPU registering function
+BOOL  register_PEOPSGPU()
+{
+  //  GPU inicialization/deinicialization functions
+  GPU_init    = GPUinit;
+  GPU_done    = GPUdone;
+  GPU_freeze  = GPUfreeze;
+
+  //  GPU Vsinc Notification
+  GPU_vSinc = GPUvSinc;
+
+  //  GPU DMA comunication
+  GPU_dmaChain      = GPUdmaChain;
+  GPU_writeDataMem  = GPUwriteDataMem;
+  GPU_readDataMem   = GPUreadDataMem;
+
+  //  GPU Memory comunication
+  GPU_writeData   = GPUwriteData;
+  GPU_writeStatus = GPUwriteStatus;
+  GPU_readData    = GPUreadData;
+  
+  return TRUE;
+}
+

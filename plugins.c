@@ -13,6 +13,8 @@ int OpenPlugins(void)
 	int ret;
 #if defined(PSP) && defined(PSP_GPU)
   GPU_SelectPluggin(2);
+#elif defined(MAEMO_CHANGES) && defined(PEOPS_GPU)
+  GPU_SelectPluggin(4);
 #elif defined(PANDORA)
   GPU_SelectPluggin(0); // 3
 #else

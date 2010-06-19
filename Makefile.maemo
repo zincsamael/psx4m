@@ -162,7 +162,7 @@ GPU_OBJS += gpuAPI/peopsGPU/cfg.o  \
             gpuAPI/peopsGPU/soft.o \
             gpuAPI/peopsGPU/texture.o \
             libmesagles.a
-DEFAULT_CFLAGS += -I ./glesport/include
+DEFAULT_CFLAGS += -I ./glesport/include -DPEOPS_GPU
 else
 ifdef DRHELLGPU
 GPU_OBJS += gpuAPI/drhellGPU/GPU.o 

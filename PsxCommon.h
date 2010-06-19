@@ -158,6 +158,7 @@ extern int NetOpened;
 #define BIAS_CYCLE_INC 1
 #define PSXCLK	33868800	/* 33.8688 Mhz */
 
+#ifndef _GPU_API_
 #include "minimal.h"
 #include "gpuAPI/gpuAPI.h"
 #include "R3000A.h"
@@ -176,6 +177,7 @@ extern int NetOpened;
 #include "Misc.h"
 #include "Debug.h"
 #include "gte.h"
+#endif
 
 
 #endif /* __PSXCOMMON_H__ */
