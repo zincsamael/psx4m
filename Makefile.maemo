@@ -152,8 +152,7 @@ GPU_OBJS =  gpuAPI/gpuAPI.o
 
 
 ifdef PEOPSGPU
-GPU_OBJS += glesport/libmesagles.a \
-            gpuAPI/peopsGPU/cfg.o  \
+GPU_OBJS += gpuAPI/peopsGPU/cfg.o  \
             gpuAPI/peopsGPU/draw.o \
             gpuAPI/peopsGPU/fps.o  \
             gpuAPI/peopsGPU/gpu.o  \
@@ -161,7 +160,8 @@ GPU_OBJS += glesport/libmesagles.a \
             gpuAPI/peopsGPU/menu.o \
             gpuAPI/peopsGPU/prim.o \
             gpuAPI/peopsGPU/soft.o \
-            gpuAPI/peopsGPU/texture.o
+            gpuAPI/peopsGPU/texture.o \
+            libmesagles.a
 DEFAULT_CFLAGS += -I ./glesport/include
 else
 ifdef DRHELLGPU
@@ -211,9 +211,9 @@ clean:
 	$(RM) $(PROG) $(OBJS) $(GPU_OBJS)
 	make -C glesport/src/mesa clean
 
-glesport/libmesagles.a:
+libmesagles.a:
 	make -C glesport/src/mesa gles-static
-	cp glesport/src/mesa/libmesagles.a $@
+	cp -f glesport/src/mesa/libmesagles.a $@
 
 test:
 	$(CXX) $(CFLAGS) -S -o arm/arm_std_rec.S arm/arm_std_rec.cpp
