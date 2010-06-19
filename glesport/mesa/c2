@@ -1,1 +1,0 @@
-gcc -g egltest.c -o egltest -lX11 -lGLES_CM && ./egltest

@@ -1,1 +1,0 @@
-LD_PRELOAD=libGLES_CM.so LD_LIBRARY_PATH=../../lib/ gdb /usr/lib/games/quake2/quake2.real
