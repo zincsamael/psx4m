@@ -5,7 +5,7 @@ LDLIBS:=$(shell pkg-config --libs $(PKGS))
 -include ../config.mk
 
 # The about dialog will use this
-CPPFLAGS+=-DGAME_VERSION=$(GAME_VERSION)
+CPPFLAGS+=-DGAME_VERSION=\"$(GAME_VERSION)\"
 
 GETTEXT_PACKAGE:=psx4all_plugin
 ifeq ($(CONF_NLS), 1)
@@ -18,7 +18,7 @@ GAME_PLUGIN_PATH=/usr/lib/psx4all_plugin.so
 GAME_CONF_PATH=$(GAME_SHARE_PATH)/psx4all.conf
 GAME_BIN_PATH=/usr/games/psx4all
 GAME_BANNER_FILE=psx4all_banner.jpg
-GAME_BANNER_PATH=/usr/share/pixmaps/osso-games-startup-psx4all.png
+GAME_BANNER_PATH=/usr/share/pixmaps/osso-games-startup-psx4all.jpg
 
 M4:=m4
 M4DEFS:= -DGAME_VERSION=$(GAME_VERSION) -DGAME_PLUGIN_PATH=$(GAME_PLUGIN_PATH)
@@ -75,8 +75,9 @@ install: all
 	install -m 0644 psx4all.desktop $(DESTDIR)/usr/share/applications/hildon/
 	install -m 0644 psx4all.service $(DESTDIR)/usr/share/dbus-1/services/
 	install -m 0644 psx4all.startup.service $(DESTDIR)/usr/share/dbus-1/services/
-	install -m 0644 icons/$(GAME_BANNER_FILE) $(DESTDIR)$(GAME_BANNER_PATH)
+	install -m 0644 $(GAME_BANNER_FILE) $(DESTDIR)$(GAME_BANNER_PATH)
 	install -m 0644 psx4all.schemas $(DESTDIR)/usr/share/gconf/schemas/
+	install -m 0644 psx4all.png $(DESTDIR)/usr/share/pixmaps/
 ifneq ($(GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL),1)
 	gconftool-2 --makefile-install-rule $(DESTDIR)/usr/share/gconf/schemas/psx4all.schemas > /dev/null
 endif

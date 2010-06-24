@@ -32,8 +32,10 @@
 #include <hildon/hildon-touch-selector.h>
 #include <pango/pango-attributes.h>
 
+#include "plugin.h"
 #include "gconf.h"
-#include "gui.h"
+#include "i18n.h"
+
 extern int skipCountTable[];
 extern int skipRateTable[];
 
@@ -57,66 +59,66 @@ static HildonPickerButton* multiplier_picker;
 static void load_settings()
 {
 	hildon_check_button_set_active(gpustat_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfGPUStat, NULL));
+		gconf_client_get_bool(gcc, kGConfGPUStat, NULL));
 	hildon_check_button_set_active(vmem_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfVMEM, NULL));
+		gconf_client_get_bool(gcc, kGConfVMEM, NULL));
 	hildon_check_button_set_active(nullgpu_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfNullGPU, NULL));
+		gconf_client_get_bool(gcc, kGConfNullGPU, NULL));
 	hildon_check_button_set_active(flimit_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfFrameLimit, NULL));
+		gconf_client_get_bool(gcc, kGConfFrameLimit, NULL));
 	hildon_check_button_set_active(fskip_line_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfFrameSkipLine, NULL));
+		gconf_client_get_bool(gcc, kGConfFrameSkipLine, NULL));
 	hildon_check_button_set_active(fskip_poly_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfFrameSkipPoly, NULL));
+		gconf_client_get_bool(gcc, kGConfFrameSkipPoly, NULL));
 	hildon_check_button_set_active(fskip_sprite_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfFrameSkipSprite, NULL));
+		gconf_client_get_bool(gcc, kGConfFrameSkipSprite, NULL));
 	hildon_check_button_set_active(fskip_image_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfFrameSkipImage, NULL));
+		gconf_client_get_bool(gcc, kGConfFrameSkipImage, NULL));
 	hildon_check_button_set_active(fskip_blit_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfFrameSkipBlit, NULL));
+		gconf_client_get_bool(gcc, kGConfFrameSkipBlit, NULL));
 	hildon_check_button_set_active(wclock_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfWallClock, NULL));
+		gconf_client_get_bool(gcc, kGConfWallClock, NULL));
 	hildon_check_button_set_active(abbey_check,
-		gconf_client_get_bool(gui_data.gcc, kGConfAbbeyFix, NULL));
+		gconf_client_get_bool(gcc, kGConfAbbeyFix, NULL));
 
 	hildon_picker_button_set_active(interlace_picker,
-		gconf_client_get_int(gui_data.gcc, kGConfInterlace, NULL));
+		gconf_client_get_int(gcc, kGConfInterlace, NULL));
 	hildon_picker_button_set_active(fskip_picker,
-		gconf_client_get_int(gui_data.gcc, kGConfFrameSkip, NULL));
+		gconf_client_get_int(gcc, kGConfFrameSkip, NULL));
 	hildon_picker_button_set_active(multiplier_picker,
-		gconf_client_get_int(gui_data.gcc, kGConfCycleMultiplier, NULL));
+		gconf_client_get_int(gcc, kGConfCycleMultiplier, NULL));
 }
 
 static void save_settings()
 {
-	gconf_client_set_bool(gui_data.gcc, kGConfGPUStat,
+	gconf_client_set_bool(gcc, kGConfGPUStat,
 		hildon_check_button_get_active(gpustat_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfVMEM,
+	gconf_client_set_bool(gcc, kGConfVMEM,
 		hildon_check_button_get_active(vmem_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfNullGPU,
+	gconf_client_set_bool(gcc, kGConfNullGPU,
 		hildon_check_button_get_active(nullgpu_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfFrameLimit,
+	gconf_client_set_bool(gcc, kGConfFrameLimit,
 		hildon_check_button_get_active(flimit_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfFrameSkipLine,
+	gconf_client_set_bool(gcc, kGConfFrameSkipLine,
 		hildon_check_button_get_active(fskip_line_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfFrameSkipPoly,
+	gconf_client_set_bool(gcc, kGConfFrameSkipPoly,
 		hildon_check_button_get_active(fskip_poly_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfFrameSkipSprite,
+	gconf_client_set_bool(gcc, kGConfFrameSkipSprite,
 		hildon_check_button_get_active(fskip_sprite_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfFrameSkipImage,
+	gconf_client_set_bool(gcc, kGConfFrameSkipImage,
 		hildon_check_button_get_active(fskip_image_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfFrameSkipBlit,
+	gconf_client_set_bool(gcc, kGConfFrameSkipBlit,
 		hildon_check_button_get_active(fskip_blit_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfWallClock,
+	gconf_client_set_bool(gcc, kGConfWallClock,
 		hildon_check_button_get_active(wclock_check), NULL);
-	gconf_client_set_bool(gui_data.gcc, kGConfAbbeyFix,
+	gconf_client_set_bool(gcc, kGConfAbbeyFix,
 		hildon_check_button_get_active(abbey_check), NULL);
 
-	gconf_client_set_int(gui_data.gcc, kGConfInterlace,
+	gconf_client_set_int(gcc, kGConfInterlace,
 		hildon_picker_button_get_active(interlace_picker), NULL);
-	gconf_client_set_int(gui_data.gcc, kGConfFrameSkip,
+	gconf_client_set_int(gcc, kGConfFrameSkip,
 		hildon_picker_button_get_active(fskip_picker), NULL);
-	gconf_client_set_int(gui_data.gcc, kGConfCycleMultiplier,
+	gconf_client_set_int(gcc, kGConfCycleMultiplier,
 		hildon_picker_button_get_active(multiplier_picker), NULL);
 }
 

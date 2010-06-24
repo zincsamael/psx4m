@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Version=GAME_VERSION
 Type=Application
-Name=PSX4All
+Name=PSX
 GenericName=PlayStation Emulator
 Comment=Sony PlayStation emulator
 Exec=/usr/bin/osso_games_startup GAME_CONF_PATH

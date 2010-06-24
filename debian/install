@@ -1,5 +1,1 @@
 psx4m usr/games/
-src/maemo/psx4m.desktop usr/share/applications/hildon/
-src/maemo/psx4all.png usr/share/pixmaps/
-src/maemo/psx4all_banner.jpg usr/share/psx4m/
-src/maemo/psx4all.schemas usr/share/gconf/schemas/

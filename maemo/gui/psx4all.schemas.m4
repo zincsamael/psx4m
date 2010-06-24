@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-define(`choose', `$2')dnl
 define(`N_', `$*')dnl
 <gconfschemafile>
   <schemalist>
@@ -63,7 +62,7 @@ define(`BUTTON', `dnl
       <applyto>/apps/maemo/psx4all/player1/keyboard/$2</applyto>
       <owner>psx4all</owner>
       <type>int</type>
-      <default>choose($4,$5)</default>
+      <default>$4</default>
       <locale name="C">
         <short>$1 button</short>
       </locale>
@@ -75,7 +74,7 @@ define(`ACTION', `dnl
       <applyto>/apps/maemo/psx4all/player1/keyboard/$2</applyto>
       <owner>psx4all</owner>
       <type>int</type>
-      <default>choose($4,$5)</default>
+      <default>$4</default>
       <locale name="C">
         <short>$1 action</short>
       </locale>

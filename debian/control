@@ -7,8 +7,10 @@ Standards-Version: 3.7.3
 
 Package: psx4m
 Architecture: armel
-Depends: ${shlibs:Depends}
+Depends: osso-games-startup, ${shlibs:Depends}
 Description: Sony PlayStation emulator
+Conflicts: psx4all
+Replaces: psx4all
 XSBC-Bugtracker: http://github.com/smokku/psx4all/issues
 XB-Maemo-Display-Name: PSX4M
 XB-Maemo-Icon-26:

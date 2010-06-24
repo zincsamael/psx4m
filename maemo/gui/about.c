@@ -55,7 +55,7 @@ void about_dialog(GtkWindow* parent)
 		LOGO_ICON_SIZE);
 	GtkWidget* label = gtk_label_new(NULL);
 	gchar * label_caption = g_strdup_printf("<b>%s</b> %s",
-		APP_NAME, APP_VERSION);
+		"PSX4M", GAME_VERSION);
 	gtk_label_set_markup(GTK_LABEL(label), label_caption);
 	g_free(label_caption);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0f, 0.5f);

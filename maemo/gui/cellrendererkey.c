@@ -1,8 +1,9 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
-#include "gui.h"
 #include "cellrendererkey.h"
+
+#include "i18n.h"
 
 #define CELL_RENDERER_TEXT_PATH "cell-renderer-key-text"
 
@@ -371,11 +372,11 @@ cell_renderer_key_start_editing (GtkCellRenderer      *cell,
   
   celltext = GTK_CELL_RENDERER_TEXT (cell);
   key = CELL_RENDERER_KEY (cell);
-#if 0
+
   /* If the cell isn't editable we return NULL. */
   if (celltext->editable == FALSE)
     return NULL;
-#endif
+
   g_return_val_if_fail (widget->window != NULL, NULL);
   
   if (gdk_keyboard_grab (widget->window, FALSE,
