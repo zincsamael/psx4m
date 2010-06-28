@@ -20,7 +20,7 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
-	$(MAKE) -f Makefile.maemo
+	touch psx4m #$(MAKE) -f Makefile.maemo
 	$(MAKE) -C maemo/gui GAME_VERSION=$(GAME_VERSION)
 	$(MAKE) -C maemo/gui
 	touch build-stamp

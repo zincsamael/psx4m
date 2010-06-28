@@ -36,11 +36,12 @@
 #include "gconf.h"
 #include "i18n.h"
 
-extern int skipCountTable[];
-extern int skipRateTable[];
+/* from main.cpp */
+int  skipCountTable[9] 	= { 0,1,3,2,4,7,10,15,17 };
+int  skipRateTable[9] 	= { 1,2,5,3,5,8,11,16,18 };
 
 static GtkDialog* dialog;
-static HildonButton* keys_btn;
+static HildonButton* player1_btn, * player2_btn;
 static HildonCheckButton* gpustat_check;
 static HildonCheckButton* vmem_check;
 static HildonCheckButton* nullgpu_check;
@@ -56,8 +57,23 @@ static HildonPickerButton* interlace_picker;
 static HildonPickerButton* fskip_picker;
 static HildonPickerButton* multiplier_picker;
 
+void settings_update_controls(int player)
+{
+	switch (player) {
+		case 1:
+			hildon_button_set_value(player1_btn, controls_describe(1));
+			break;
+		case 2:
+			hildon_button_set_value(player2_btn, controls_describe(2));
+			break;
+	}
+}
+
 static void load_settings()
 {
+	settings_update_controls(1);
+	settings_update_controls(2);
+
 	hildon_check_button_set_active(gpustat_check,
 		gconf_client_get_bool(gcc, kGConfGPUStat, NULL));
 	hildon_check_button_set_active(vmem_check,
@@ -131,9 +147,9 @@ static void cb_dialog_response(GtkWidget * button, gint response, gpointer data)
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
-static void keys_btn_callback(GtkWidget * button, gpointer data)
+static void controls_btn_callback(GtkWidget * button, gpointer data)
 {
-	keys_dialog(GTK_WINDOW(dialog), GPOINTER_TO_INT(data));
+	controls_dialog(GTK_WINDOW(dialog), GPOINTER_TO_INT(data));
 }
 
 gchar* get_frameskip_name(int skipValue)
@@ -174,14 +190,23 @@ void settings_dialog(GtkWindow* parent)
 	gtk_label_set_attributes(separator_1, pattrlist);
 	gtk_label_set_justify(separator_1, GTK_JUSTIFY_CENTER);
 
-	keys_btn = HILDON_BUTTON(hildon_button_new_with_text(
+	player1_btn = HILDON_BUTTON(hildon_button_new_with_text(
 		HILDON_SIZE_AUTO_WIDTH | HILDON_SIZE_FINGER_HEIGHT,
 		HILDON_BUTTON_ARRANGEMENT_HORIZONTAL,
-		_("Configure keys…"), NULL));
-	set_button_layout(HILDON_BUTTON(keys_btn),
+		_("Player 1"), NULL));
+	set_button_layout(HILDON_BUTTON(player1_btn),
 		titles_size_group, values_size_group);
-	g_signal_connect(G_OBJECT(keys_btn), "clicked",
-					G_CALLBACK(keys_btn_callback), GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(player1_btn), "clicked",
+					G_CALLBACK(controls_btn_callback), GINT_TO_POINTER(1));
+
+	player2_btn = HILDON_BUTTON(hildon_button_new_with_text(
+		HILDON_SIZE_AUTO_WIDTH | HILDON_SIZE_FINGER_HEIGHT,
+		HILDON_BUTTON_ARRANGEMENT_HORIZONTAL,
+		_("Player 2"), NULL));
+	set_button_layout(HILDON_BUTTON(player2_btn),
+		titles_size_group, values_size_group);
+	g_signal_connect(G_OBJECT(player2_btn), "clicked",
+					G_CALLBACK(controls_btn_callback), GINT_TO_POINTER(2));
 
 	GtkLabel* separator_2 = GTK_LABEL(gtk_label_new(_("Graphics")));
 	gtk_label_set_attributes(separator_2, pattrlist);
@@ -307,7 +332,9 @@ void settings_dialog(GtkWindow* parent)
 
 	gtk_box_pack_start(box, GTK_WIDGET(separator_1),
 		FALSE, FALSE, HILDON_MARGIN_HALF);
-	gtk_box_pack_start(box, GTK_WIDGET(keys_btn),
+	gtk_box_pack_start(box, GTK_WIDGET(player1_btn),
+		FALSE, FALSE, 0);
+	gtk_box_pack_start(box, GTK_WIDGET(player2_btn),
 		FALSE, FALSE, 0);
 	gtk_box_pack_start(box, GTK_WIDGET(separator_2),
 		FALSE, FALSE, HILDON_MARGIN_HALF);
