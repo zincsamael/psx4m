@@ -20,9 +20,7 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
-	touch psx4m #$(MAKE) -f Makefile.maemo
-	$(MAKE) -C maemo/gui GAME_VERSION=$(GAME_VERSION)
-	$(MAKE) -C maemo/gui
+	$(MAKE) -f Makefile.maemo
 	touch build-stamp
 
 clean:
@@ -31,13 +29,11 @@ clean:
 	rm -f build-stamp
 	dh_clean
 	$(MAKE) -f Makefile.maemo clean
-	$(MAKE) -C maemo/gui clean
 
 install: build
 	dh_testdir
 	dh_testroot
 	dh_installdirs
-	$(MAKE) -C maemo/gui DESTDIR=$(CURDIR)/debian/psx4m GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1 install
 	dh_install
 
 binary-indep: build install

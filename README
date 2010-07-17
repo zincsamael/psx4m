@@ -28,79 +28,11 @@ for Slot 1 and Slot 2, respectively. If these files do not exist in
 /home/user, psx4all will create them.
 
 
-Graphics Options
-~~~~~~~~~~~~~~~~
-I don't know the meaning of all these options either, so I will stick to
-those that I know and consider useful, or that I have added myself.
-
-Show FPS		whether or not to show the frame rate statstics on
-			top of the screen
-
-Frame Skip		Frameskipping can speed up emulation considerably,
-			but will lead to choppy graphics and in many cases
-			glitches. It is currently your best option to get
-			full-speed or near full-speed emulation on many
-			games, though. 2/3 frameskip appears to work best
-			for most cases. 1/2 almost always causes severe
-			problems.
-
-Cycle Multiplier	Increasing the cycle multiplier makes the emulated
-			PlayStation hardware run faster relative to its CPU.
-			This can help speed up games that don't use the CPU
-			much and mostly idle around waiting for the next
-			frame. In other cases, it will not make a
-			difference, or even make the game slower. Don't be
-			fooled by the increased frame rate! If the CPU is
-			too slow to keep up, a high frame rate will be of no
-			consequence.
-
-Frameskip: ....		These option allow you to fine-tune the
-			frameskipping behavior. When frameskipping causes
-			glitches you can turn it off for certain parts of
-			the graphics emulation instead of turning it off
-			completely.
-
-Wall Clock Timing	This option is experimental, and I'm not quite sure
-			if it is useful at all. It causes the hardware
-			timing to be based on real-world ("wall clock") time
-			instead of the cycle count of the emulated CPU. Its
-			effect and its problems are very similar to that of
-			the Cycle Multiplier option, but it locks the
-			framerate to what it would be in real life.
-
-Sound Options
-~~~~~~~~~~~~~
-The only option is to turn the sound on and off. And that only works in the
-SPU build ("psx4all_sound").
-
-File Options
-~~~~~~~~~~~~
-
-Save Game State		Freezes the emulated system and dumps its state into
-			a file that can be reloaded later. Files are named
-			after the game disc image, with a dash, a
-			four-figure counter and the extension ".svs" added.
-			Don't rename them, or psx4all won't know what disc
-			image to use when loading them.
-
-Load Game State		Restores a saved state.
-
-Load A Game		Boots a CD image via the original PlayStation BIOS.
-			BIN and CBN images are supported, plus a couple of
-			esoteric formats I have never heard of before.
-
-Load A Game Without BIOS Boots a CD image with high-level BIOS emulation
-			enabled. The compatibility is lower compared to
-			using the original BIOS, but indicated framerates
-			are higher. Games don't generally feel faster,
-			though, so that may well be a bug.
-
-
 Source code, Binary Releases, Changelog, and Bug Tracking
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-All of these can be found on the psx4all page at github:
+All of these can be found on the psx4m page at github:
 
-http://github.com/smokku/psx4all/
+http://github.com/smokku/psx4m
 
 
 Have a lot of fun!

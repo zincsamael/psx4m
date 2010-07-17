@@ -30,6 +30,8 @@
 
 #include "PsxCommon.h"
 #include "Sio.h"
+#include "gpuAPI/newGPU/newGPU.h"
+
 #ifdef IPHONE
 extern const char* get_resource_path(char* file);
 extern const char* get_documents_path(char* file);
@@ -83,22 +85,33 @@ int main(int argc, char *argv[])
 	int runcd = 0;
 	char* loadst = NULL;
 	int i;
+	int  skipCountTable[9] 	= { 0,1,3,2,4,7,10,15,17 };
+	int  skipRateTable[9] 	= { 1,2,5,3,5,8,11,16,18 };
 
-  __saved = 0;
+	__saved = 0;
 	memset(&Config, 0, sizeof(PcsxConfig));
 	Config.HLE = 0;
 	sprintf(Config.Bios, "/scph1001.bin");
 	
 	strcpy(Config.Net, _("Disabled"));
 #ifdef IPHONE
-  ChangeWorkingDirectory(get_documents_path("psx4iphone"));
+	ChangeWorkingDirectory(get_documents_path("psx4iphone"));
 #else
 	ChangeWorkingDirectory(argv[0]);
 #endif
+#ifdef ROM_PREFIX
+	strncpy(gamepath,ROM_PREFIX,1024);
+#else
 	getcwd(gamepath, 1024);
+#endif
 	sprintf(Config.BiosDir, "%s", gamepath);
+#ifdef DATA_PREFIX
+	sprintf(Config.Mcd1, "%s/mcd001.mcr", DATA_PREFIX);
+	sprintf(Config.Mcd2, "%s/mcd002.mcr", DATA_PREFIX);
+#else
 	sprintf(Config.Mcd1, "%s/mcd001.mcr", gamepath);
 	sprintf(Config.Mcd2, "%s/mcd002.mcr", gamepath);
+#endif
 	Config.PsxAuto = 1;
 	Config.Cdda = 0;
 	Config.Xa = 0;
@@ -115,6 +128,7 @@ int main(int argc, char *argv[])
 	Config.Sio = 0;
 	Config.SpuIrq = 0;
 	Config.VSyncWA = 0;
+	displayFrameInfo = 0;
 
 	for (i=1; i<argc; i++) {
 		if (!strcmp(argv[i], "-runcd")) runcd = 1;
@@ -123,21 +137,47 @@ int main(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-load")) loadst = argv[++i];
 		else if (!strcmp(argv[i], "-hle")) 
 		{
-		  Config.HLE = 1;
-    	sprintf(Config.Bios, "HLE");
+			Config.HLE = 1;
+			sprintf(Config.Bios, "HLE");
+		}
+		else if (!strcmp(argv[i], "-nosound")) iSoundMuted = 1;
+		else if (!strcmp(argv[i], "-showfps")) displayFrameInfo = 1;
+		else if (!strcmp(argv[i], "-gpustats")) displayGpuStats = 1;
+		else if (!strcmp(argv[i], "-frameskip"))
+		{
+			int skipValue = atoi(argv[++i]);
+			if (skipValue >= 0 && skipValue <= 8)
+			{
+				skipCount = skipCountTable[skipValue];
+				skipRate = skipRateTable[skipValue];
+			}
+		}
+		else if (!strcmp(argv[i], "-ilace"))
+		{
+			int iLace = atoi(argv[++i]);
+			if (iLace == 0 || iLace == 1 || iLace == 3 || iLace == 7)
+			{
+				linesInterlace_user = iLace;
+			}
 		}
 		else if (!strcmp(argv[i], "-h") ||
-			 !strcmp(argv[i], "-help")) {
+			 !strcmp(argv[i], "-help") ||
+			 !strcmp(argv[i], "--help")) {
 			 printf("%s %s\n", argv[0], _(
-			 				"[options] [file]\n"
+			 				"[options] [FILE]\n"
 							"\toptions:\n"
+							"\t-h -help --help\tThis help\n"
 							"\t-runcd\t\tRuns CdRom\n"
 							"\t-runcdbios\tRuns CdRom Through Bios\n"
 							"\t-hle\t\tUse HLE\n"
-							"\t-psxout\t\tEnable psx output\n"
+							"\t-psxout\t\tEnable stdout output\n"
 							"\t-load STATENUM\tLoads savestate STATENUM (1-5)\n"
-							"\t-h -help\tThis help\n"
-							"\tfile\t\tLoads file\n"));
+							"\t-nosound\tDisable sound\n"
+							"\t-showfps\tShow FPS\n"
+							"\t-gpustats\tShow GPU statistics\n"
+							"\t-frameskip 0-8\tFrame skipping ratio\n"
+							"\t-ilace 0,1,3,7\tInterlace lines\n"
+							"\tFILE\t\tCdRom file\n"));
 			 return 0;
 		} else file = argv[i];
 	}
@@ -182,6 +222,30 @@ int main(int argc, char *argv[])
 		sprintf (save_filename, "%s", loadst);
 		LoadState(save_filename);
 	}
+
+#ifdef MAEMO_CHANGES
+	printf("Running : %s\n"
+		"Show FPS                 %s\n"
+		"Show GPU Stats           %s\n"
+		"Display Video Memory     %s\n"
+		"Set NULL GPU             %s\n"
+		"Interlace Count          %d\n"
+		"Frame Limit              %s\n"
+		"Frame Skip               %d/%d\n"
+		"Abe's Oddysee Fix        %s\n"
+		"SOUND IS %s\n",
+		file,
+		(displayFrameInfo == false ? "OFF" : "ON"),
+		(displayGpuStats == false ? "OFF" : "ON"),
+		(displayVideoMemory == false ? "OFF" : "ON"),
+		(activeNullGPU == false ? "OFF" : "ON"),
+		linesInterlace_user,
+		(enableFrameLimit == false ? "OFF" : "ON"),
+		skipCount, skipRate,
+		(enableAbbeyHack == false ? "OFF" : "ON"),
+		(iSoundMuted == 0 ? "ON" : "OFF")
+	);
+#endif
 
 	psxCpu->Execute();
 	return 0;

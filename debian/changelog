@@ -1,5 +1,13 @@
+psx4m (0.4.2) fremantle; urgency=low
+
+  * 
+a
+ -- Tomasz Sterna <tomek@xiaoka.com>  Sat, 17 Jul 2010 17:06:24 +0200
+
 psx4m (0.4.1) fremantle; urgency=low
 
   * Initial packaging.
+  * Implemented PulseAudio sound backend
+  * Implemented HAA video scaler
 
  -- Tomasz Sterna <tomek@xiaoka.com>  Sat,  5 Jun 2010 21:21:28 +0200
