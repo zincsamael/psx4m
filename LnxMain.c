@@ -97,7 +97,9 @@ int main(int argc, char *argv[])
 #ifdef IPHONE
 	ChangeWorkingDirectory(get_documents_path("psx4iphone"));
 #else
+#ifndef MAEMO_CHANGES
 	ChangeWorkingDirectory(argv[0]);
+#endif
 #endif
 #ifdef ROM_PREFIX
 	strncpy(gamepath,ROM_PREFIX,1024);
