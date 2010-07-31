@@ -138,7 +138,9 @@ int main(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-load")) loadst = argv[++i];
 		else if (!strcmp(argv[i], "-nosound")) iSoundMuted = 1;
 		else if (!strcmp(argv[i], "-showfps")) displayFrameInfo = 1;
+#if defined(ENABLE_GPU_PRIM_STATS) || defined(ENABLE_GPU_PROFILLER)
 		else if (!strcmp(argv[i], "-gpustats")) displayGpuStats = 1;
+#endif
 		else if (!strcmp(argv[i], "-frameskip"))
 		{
 			int skipValue = atoi(argv[++i]);
@@ -176,7 +178,9 @@ int main(int argc, char *argv[])
 							"\t-load STATENUM\tLoads savestate STATENUM (1-5)\n"
 							"\t-nosound\tDisable sound\n"
 							"\t-showfps\tShow FPS\n"
-							"\t-gpustats\tShow GPU statistics\n"
+#if defined(ENABLE_GPU_PRIM_STATS) || defined(ENABLE_GPU_PROFILLER)
+							"\t-gpustats\tShow GPU statistics (needs -showfps)\n"
+#endif
 							"\t-frameskip 0-8\tFrame skipping ratio\n"
 							"\t-cyclemult 0-10\tCPU cycle multiplier\n"
 							"\t-ilace 0,1,3,7\tInterlace lines\n"
@@ -230,7 +234,9 @@ int main(int argc, char *argv[])
 	printf(
 		"CdromFile: %s\n"
 		"Show FPS                 %s\n"
+#if defined(ENABLE_GPU_PRIM_STATS) || defined(ENABLE_GPU_PROFILLER)
 		"Show GPU Stats           %s\n"
+#endif
 		"Display Video Memory     %s\n"
 		"Set NULL GPU             %s\n"
 		"Interlace Count          %d\n"
@@ -241,7 +247,9 @@ int main(int argc, char *argv[])
 		"Sound                    %s\n",
 		file,
 		(displayFrameInfo == false ? "OFF" : "ON"),
+#if defined(ENABLE_GPU_PRIM_STATS) || defined(ENABLE_GPU_PROFILLER)
 		(displayGpuStats == false ? "OFF" : "ON"),
+#endif
 		(displayVideoMemory == false ? "OFF" : "ON"),
 		(activeNullGPU == false ? "OFF" : "ON"),
 		linesInterlace_user,
