@@ -430,6 +430,7 @@ static void recBREAK() { }
 
 static void recHLE() 
 {
+#ifdef WITH_HLE
 	regClearJump();
 	
 	/* Needed? */
@@ -444,5 +445,6 @@ static void recHLE()
 	CALLFunc((u32)psxBranchTest_rec);
 
 	end_block = 1;
+#endif
 }
 

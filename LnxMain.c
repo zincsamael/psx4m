@@ -134,14 +134,8 @@ int main(int argc, char *argv[])
 
 	for (i=1; i<argc; i++) {
 		if (!strcmp(argv[i], "-runcd")) runcd = 1;
-		else if (!strcmp(argv[i], "-runcdbios")) runcd = 2;
 		else if (!strcmp(argv[i], "-psxout")) Config.PsxOut = 1;
 		else if (!strcmp(argv[i], "-load")) loadst = argv[++i];
-		else if (!strcmp(argv[i], "-hle")) 
-		{
-			Config.HLE = 1;
-			sprintf(Config.Bios, "HLE");
-		}
 		else if (!strcmp(argv[i], "-nosound")) iSoundMuted = 1;
 		else if (!strcmp(argv[i], "-showfps")) displayFrameInfo = 1;
 		else if (!strcmp(argv[i], "-gpustats")) displayGpuStats = 1;
@@ -174,12 +168,10 @@ int main(int argc, char *argv[])
 			 !strcmp(argv[i], "-help") ||
 			 !strcmp(argv[i], "--help")) {
 			 printf("%s %s\n", argv[0], _(
-			 				"[options] [FILE]\n"
+			 				"[options] [CD IMAGE FILE]\n"
 							"\toptions:\n"
 							"\t-h -help --help\tThis help\n"
 							"\t-runcd\t\tRuns CdRom\n"
-							"\t-runcdbios\tRuns CdRom Through Bios\n"
-							"\t-hle\t\tUse HLE\n"
 							"\t-psxout\t\tEnable stdout output\n"
 							"\t-load STATENUM\tLoads savestate STATENUM (1-5)\n"
 							"\t-nosound\tDisable sound\n"
@@ -235,7 +227,7 @@ int main(int argc, char *argv[])
 	}
 
 #ifdef MAEMO_CHANGES
-	printf("Running : %s\n"
+	printf("CdromFile: %s\n"
 		"Show FPS                 %s\n"
 		"Show GPU Stats           %s\n"
 		"Display Video Memory     %s\n"

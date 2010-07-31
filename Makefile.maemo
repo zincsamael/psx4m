@@ -21,7 +21,7 @@ NAME  = psx4m
 
 PROG   = $(NAME)
 
-USE_HLE=1
+#USE_HLE=1
 NEWSPU=1
 #DRHELLGPU=1
 #PEOPSGPU=1
@@ -91,7 +91,6 @@ OBJS =	\
 	PsxBios.o \
 	PsxCounters.o \
 	PsxDma.o \
-	PsxHLE.o \
 	PsxHw.o \
 	PsxMem.o \
 	R3000A.o \
