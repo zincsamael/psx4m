@@ -227,7 +227,8 @@ int main(int argc, char *argv[])
 	}
 
 #ifdef MAEMO_CHANGES
-	printf("CdromFile: %s\n"
+	printf(
+		"CdromFile: %s\n"
 		"Show FPS                 %s\n"
 		"Show GPU Stats           %s\n"
 		"Display Video Memory     %s\n"
