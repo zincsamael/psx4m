@@ -154,6 +154,14 @@ int main(int argc, char *argv[])
 				skipRate = skipRateTable[skipValue];
 			}
 		}
+		else if (!strcmp(argv[i], "-cyclemult"))
+		{
+			int cycleValue = atoi(argv[++i]);
+			if (cycleValue >= 0 && cycleValue <= 10)
+			{
+				PsxCycleMult = cycleValue;
+			}
+		}
 		else if (!strcmp(argv[i], "-ilace"))
 		{
 			int iLace = atoi(argv[++i]);
@@ -178,6 +186,7 @@ int main(int argc, char *argv[])
 							"\t-showfps\tShow FPS\n"
 							"\t-gpustats\tShow GPU statistics\n"
 							"\t-frameskip 0-8\tFrame skipping ratio\n"
+							"\t-cyclemult 0-10\tCPU cycle multiplier\n"
 							"\t-ilace 0,1,3,7\tInterlace lines\n"
 							"\tFILE\t\tCdRom file\n"));
 			 return 0;
@@ -234,8 +243,9 @@ int main(int argc, char *argv[])
 		"Interlace Count          %d\n"
 		"Frame Limit              %s\n"
 		"Frame Skip               %d/%d\n"
+		"Cycle Multiplier         %d\n"
 		"Abe's Oddysee Fix        %s\n"
-		"SOUND IS %s\n",
+		"Sound                    %s\n",
 		file,
 		(displayFrameInfo == false ? "OFF" : "ON"),
 		(displayGpuStats == false ? "OFF" : "ON"),
@@ -244,6 +254,7 @@ int main(int argc, char *argv[])
 		linesInterlace_user,
 		(enableFrameLimit == false ? "OFF" : "ON"),
 		skipCount, skipRate,
+		PsxCycleMult,
 		(enableAbbeyHack == false ? "OFF" : "ON"),
 		(iSoundMuted == 0 ? "ON" : "OFF")
 	);
