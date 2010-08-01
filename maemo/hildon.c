@@ -134,7 +134,7 @@ void gp2x_change_res(int w, int h)
 	image = gdk_image_new( GDK_IMAGE_FASTEST, gdk_visual_get_system(), w, h );
 
 	screenbuffer = (unsigned short*) image->mem;
-	screen_size = image->bpl * h * image->bpp;
+	screen_size = image->bpl * (h / (linesInterlace_user+1)) * image->bpp;
 
 	gtk_image_set_from_image (GTK_IMAGE(drawing), image, NULL);
 
